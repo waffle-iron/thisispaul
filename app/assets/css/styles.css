@@ -3,7 +3,6 @@
 COMMON VARIABLES
 */
 /*PRIMARY COLOURS*/
-/*BOOTSTRAP RESETS - these could do with better organisation*/
 /*! normalize.css v3.0.2 | MIT License | git.io/normalize */
 @import url(http://fonts.googleapis.com/css?family=Asap:400,700,400italic,700italic|Roboto+Slab:400,700);
 /* line 9, ../components/bootstrap-sass-official/assets/stylesheets/bootstrap/_normalize.scss */
@@ -8152,5 +8151,18 @@ button.close {
 }
 /*MIXINS*/
 /*Border radius*/
+/* MAIN */
+/* line 3, ../scss/_main.scss */
+h1, h2, h3, h4, h5, h6,
+.h1, .h2, .h3, .h4, .h5, .h6 {
+  font-family: "Roboto Slab", serif;
+  color: #000000;
+}
+
+/* line 9, ../scss/_main.scss */
+p {
+  font-family: "Asap", sans-serif;
+  color: #757575;
+}
 
 /*# sourceMappingURL=styles.css.map */

@@ -1,30 +1,17 @@
 /***************
 COMMON VARIABLES
-*/
+***************/
 
 $asap: 'Asap', sans-serif;
 $roboto: 'Roboto Slab', serif;
 
 /*PRIMARY COLOURS*/
 $white : #FFFFFF;
-$bodyText : #757575;
+$headerTextColor : #000000;
+$bodyTextColor : #757575;
 $bodyTextAlt : #888888;
 $lightBodyText : #CCCCCC;
 
 $tenPercentShadow:rgba(0,0,0,0.1);
 $twentyPercentShadow:rgba(0,0,0,0.2);
 $thirtyPercentShadow:rgba(0,0,0,0.3);
-
-/*BOOTSTRAP RESETS - these could do with better organisation*/
-//$brand-primary: $vizsweetBlue;
-//$state-info-bg: $vizsweetLightBlue;
-//$input-border:  #C9C9C9;
-//$nav-link-hover-bg: $vizsweetGrey;
-//$pager-hover-bg: $vizsweetGrey;
-//$pagination-hover-bg:$vizsweetGrey;
-//$input-group-addon-bg:$vizsweetGrey;
-//$input-group-addon-border-color:$vizsweetKeylineColor;
-//$input-bg-disabled:$vizsweetGrey;
-//$popover-border-color: $vizsweetKeylineColor;
-//$nav-pills-active-link-hover-bg: $vizsweetBlue;
-//$popover-arrow-width: 5px;
