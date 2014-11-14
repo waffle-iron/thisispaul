@@ -1,0 +1,20 @@
+{
+  "name": "thisispaul",
+  "version": "0.1.0",
+  "authors": [
+    "Paul Barton"
+  ],
+  "description": "thispaul Portfolio Site",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "1.2.20",
+    "bootstrap-sass-official": "3.3.1",
+    "jquery": "2.1.1"
+  }
+}
