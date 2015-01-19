@@ -1418,8 +1418,8 @@ body {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 14px;
   line-height: 1.428571429;
-  color: #333333;
-  background-color: #fff;
+  color: #fff;
+  background-color: #222222;
 }
 
 /* line 36, ../components/bootstrap-sass-official/assets/stylesheets/bootstrap/_scaffolding.scss */
@@ -1475,7 +1475,7 @@ img {
 .img-thumbnail {
   padding: 4px;
   line-height: 1.428571429;
-  background-color: #fff;
+  background-color: #222222;
   border: 1px solid #ddd;
   border-radius: 4px;
   -webkit-transition: all 0.2s ease-in-out;
@@ -1524,10 +1524,10 @@ hr {
 /* line 9, ../components/bootstrap-sass-official/assets/stylesheets/bootstrap/_type.scss */
 h1, h2, h3, h4, h5, h6,
 .h1, .h2, .h3, .h4, .h5, .h6 {
-  font-family: inherit;
+  font-family: "Roboto Slab", serif;
   font-weight: 500;
   line-height: 1.1;
-  color: inherit;
+  color: #fff;
 }
 /* line 16, ../components/bootstrap-sass-official/assets/stylesheets/bootstrap/_type.scss */
 h1 small,
@@ -3204,7 +3204,7 @@ th {
 }
 /* line 62, ../components/bootstrap-sass-official/assets/stylesheets/bootstrap/_tables.scss */
 .table .table {
-  background-color: #fff;
+  background-color: #222222;
 }
 
 /* line 75, ../components/bootstrap-sass-official/assets/stylesheets/bootstrap/_tables.scss */
@@ -3907,7 +3907,7 @@ select[multiple].input-lg,
   display: block;
   margin-top: 5px;
   margin-bottom: 10px;
-  color: #737373;
+  color: white;
 }
 
 @media (min-width: 768px) {
@@ -4986,7 +4986,7 @@ tbody.collapse.in {
 /* line 96, ../components/bootstrap-sass-official/assets/stylesheets/bootstrap/_navs.scss */
 .nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus {
   color: #555555;
-  background-color: #fff;
+  background-color: #222222;
   border: 1px solid #ddd;
   border-bottom-color: transparent;
   cursor: default;
@@ -5079,7 +5079,7 @@ tbody.collapse.in {
   .nav-tabs.nav-justified > .active > a:hover,
   .nav-tabs-justified > .active > a:focus,
   .nav-tabs.nav-justified > .active > a:focus {
-    border-bottom-color: #fff;
+    border-bottom-color: #222222;
   }
 }
 
@@ -6115,7 +6115,7 @@ a.badge:hover, a.badge:focus {
   padding: 4px;
   margin-bottom: 20px;
   line-height: 1.428571429;
-  background-color: #fff;
+  background-color: #222222;
   border: 1px solid #ddd;
   border-radius: 4px;
   -webkit-transition: border 0.2s ease-in-out;
@@ -6134,7 +6134,7 @@ a.badge:hover, a.badge:focus {
 /* line 27, ../components/bootstrap-sass-official/assets/stylesheets/bootstrap/_thumbnails.scss */
 .thumbnail .caption {
   padding: 9px;
-  color: #333333;
+  color: #fff;
 }
 
 /* line 34, ../components/bootstrap-sass-official/assets/stylesheets/bootstrap/_thumbnails.scss */
@@ -8151,22 +8151,8 @@ button.close {
 }
 /*MIXINS*/
 /*Border radius*/
-/* MAIN */
-/* line 3, ../scss/_main.scss */
-h1, h2, h3, h4, h5, h6,
-.h1, .h2, .h3, .h4, .h5, .h6 {
-  font-family: "Roboto Slab", serif;
-  color: #000000;
-}
-
-/* line 9, ../scss/_main.scss */
-p {
-  font-family: "Asap", sans-serif;
-  color: #757575;
-}
-
 /* HEADER */
-/* line 18, ../scss/_main.scss */
+/* line 5, ../scss/_main.scss */
 header .color {
   z-index: 50;
   padding: 10px 0 0 0;
@@ -8182,7 +8168,7 @@ header .color {
   -webkit-transform-origin: 0 0;
   transform-origin: 0 0;
 }
-/* line 31, ../scss/_main.scss */
+/* line 18, ../scss/_main.scss */
 header .logo {
   z-index: 100;
   width: 200px;
@@ -8202,7 +8188,7 @@ header .logo {
   -ms-border-radius: 100px;
   border-radius: 100px;
 }
-/* line 44, ../scss/_main.scss */
+/* line 31, ../scss/_main.scss */
 header .logo h1 {
   margin: 0;
   padding: 0 0 0 20px;
