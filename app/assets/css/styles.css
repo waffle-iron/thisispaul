@@ -1418,8 +1418,8 @@ body {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 14px;
   line-height: 1.428571429;
-  color: #fff;
-  background-color: #222222;
+  color: #222222;
+  background-color: #dcdcdc;
 }
 
 /* line 36, ../components/bootstrap-sass-official/assets/stylesheets/bootstrap/_scaffolding.scss */
@@ -1475,7 +1475,7 @@ img {
 .img-thumbnail {
   padding: 4px;
   line-height: 1.428571429;
-  background-color: #222222;
+  background-color: #dcdcdc;
   border: 1px solid #ddd;
   border-radius: 4px;
   -webkit-transition: all 0.2s ease-in-out;
@@ -1527,7 +1527,7 @@ h1, h2, h3, h4, h5, h6,
   font-family: "Roboto Slab", serif;
   font-weight: 500;
   line-height: 1.1;
-  color: #fff;
+  color: #222222;
 }
 /* line 16, ../components/bootstrap-sass-official/assets/stylesheets/bootstrap/_type.scss */
 h1 small,
@@ -3204,7 +3204,7 @@ th {
 }
 /* line 62, ../components/bootstrap-sass-official/assets/stylesheets/bootstrap/_tables.scss */
 .table .table {
-  background-color: #222222;
+  background-color: #dcdcdc;
 }
 
 /* line 75, ../components/bootstrap-sass-official/assets/stylesheets/bootstrap/_tables.scss */
@@ -3907,7 +3907,7 @@ select[multiple].input-lg,
   display: block;
   margin-top: 5px;
   margin-bottom: 10px;
-  color: white;
+  color: #626262;
 }
 
 @media (min-width: 768px) {
@@ -4986,7 +4986,7 @@ tbody.collapse.in {
 /* line 96, ../components/bootstrap-sass-official/assets/stylesheets/bootstrap/_navs.scss */
 .nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus {
   color: #555555;
-  background-color: #222222;
+  background-color: #dcdcdc;
   border: 1px solid #ddd;
   border-bottom-color: transparent;
   cursor: default;
@@ -5079,7 +5079,7 @@ tbody.collapse.in {
   .nav-tabs.nav-justified > .active > a:hover,
   .nav-tabs-justified > .active > a:focus,
   .nav-tabs.nav-justified > .active > a:focus {
-    border-bottom-color: #222222;
+    border-bottom-color: #dcdcdc;
   }
 }
 
@@ -6115,7 +6115,7 @@ a.badge:hover, a.badge:focus {
   padding: 4px;
   margin-bottom: 20px;
   line-height: 1.428571429;
-  background-color: #222222;
+  background-color: #dcdcdc;
   border: 1px solid #ddd;
   border-radius: 4px;
   -webkit-transition: border 0.2s ease-in-out;
@@ -6134,7 +6134,7 @@ a.badge:hover, a.badge:focus {
 /* line 27, ../components/bootstrap-sass-official/assets/stylesheets/bootstrap/_thumbnails.scss */
 .thumbnail .caption {
   padding: 9px;
-  color: #fff;
+  color: #222222;
 }
 
 /* line 34, ../components/bootstrap-sass-official/assets/stylesheets/bootstrap/_thumbnails.scss */
@@ -8152,48 +8152,5 @@ button.close {
 /*MIXINS*/
 /*Border radius*/
 /* HEADER */
-/* line 5, ../scss/_main.scss */
-header .color {
-  z-index: 50;
-  padding: 10px 0 0 0;
-  background-color: #0b97c4;
-  margin: 0 -100px 0 -100px;
-  height: 200px;
-  -moz-transform: rotate(-4.5deg);
-  -ms-transform: rotate(-4.5deg);
-  -webkit-transform: rotate(-4.5deg);
-  transform: rotate(-4.5deg);
-  -moz-transform-origin: 0 0;
-  -ms-transform-origin: 0 0;
-  -webkit-transform-origin: 0 0;
-  transform-origin: 0 0;
-}
-/* line 18, ../scss/_main.scss */
-header .logo {
-  z-index: 100;
-  width: 200px;
-  height: 200px;
-  margin: -150px 0 0 50px;
-  background-color: #000000;
-  -moz-transform: rotate(-4.5deg);
-  -ms-transform: rotate(-4.5deg);
-  -webkit-transform: rotate(-4.5deg);
-  transform: rotate(-4.5deg);
-  -moz-transform-origin: 0 0;
-  -ms-transform-origin: 0 0;
-  -webkit-transform-origin: 0 0;
-  transform-origin: 0 0;
-  -webkit-border-radius: 100px;
-  -moz-border-radius: 100px;
-  -ms-border-radius: 100px;
-  border-radius: 100px;
-}
-/* line 31, ../scss/_main.scss */
-header .logo h1 {
-  margin: 0;
-  padding: 0 0 0 20px;
-  line-height: 200px;
-  color: #f5f5f5;
-}
 
 /*# sourceMappingURL=styles.css.map */
