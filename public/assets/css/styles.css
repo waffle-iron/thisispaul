@@ -77,23 +77,27 @@ header {
 /* line 13, ../scss/_main.scss */
 header h1 {
   font-size: 3em;
-  opacity: 0.8;
 }
-/* line 18, ../scss/_main.scss */
+/* line 17, ../scss/_main.scss */
 header p {
   margin-top: 10px;
+  font-size: 1.2em;
 }
 /* line 22, ../scss/_main.scss */
 header .links {
   margin-top: 10px;
 }
 /* line 25, ../scss/_main.scss */
-header .links a {
+header .links .link {
   text-decoration: none;
-  margin-right: 5px;
+  padding-right: 5px;
+  line-height: 32px;
+  height: 32px;
+  float: left;
+  color: black;
 }
-/* line 29, ../scss/_main.scss */
-header .links a .sr-only {
+/* line 33, ../scss/_main.scss */
+header .links .link .sr-only {
   position: absolute;
   width: 1px;
   height: 1px;

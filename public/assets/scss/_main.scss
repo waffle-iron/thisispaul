@@ -12,19 +12,23 @@ header {
 
   h1 {
     font-size: 3em;
-    opacity: 0.8;
   }
 
   p {
     margin-top: 10px;
+    font-size: 1.2em;
   }
 
   .links {
     margin-top: 10px;
 
-    a {
+    .link {
       text-decoration: none;
-      margin-right: 5px;
+      padding-right: 5px;
+      line-height: 32px;
+      height: 32px;
+      float: left;
+      color: black;
 
       .sr-only {
         position: absolute;
