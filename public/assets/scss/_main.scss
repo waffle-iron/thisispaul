@@ -1,0 +1,21 @@
+/* HEADER */
+
+// VARIABLES
+@import "variables";
+
+body {
+  font-family: $roboto;
+}
+
+header {
+  padding: 10px;
+
+  h1 {
+    font-size: 3em;
+    opacity: 0.8;
+  }
+
+  p {
+    margin-top: 10px;
+  }
+}
