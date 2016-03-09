@@ -60,37 +60,36 @@ table {
   border-spacing: 0;
 }
 
-/* HEADER */
 /***************
 COMMON VARIABLES
 ***************/
 /*PRIMARY COLOURS*/
-/* line 5, ../scss/_main.scss */
+/* line 4, ../scss/_main.scss */
 body {
   font-family: "Roboto Slab", serif;
 }
 
-/* line 9, ../scss/_main.scss */
+/* line 8, ../scss/_main.scss */
 header {
   position: absolute;
   top: 0;
   left: 0;
   padding: 10px;
 }
-/* line 15, ../scss/_main.scss */
+/* line 14, ../scss/_main.scss */
 header h1 {
   font-size: 3em;
 }
-/* line 19, ../scss/_main.scss */
+/* line 18, ../scss/_main.scss */
 header p {
   margin-top: 10px;
   font-size: 1.2em;
 }
-/* line 24, ../scss/_main.scss */
+/* line 23, ../scss/_main.scss */
 header .links {
   margin-top: 10px;
 }
-/* line 27, ../scss/_main.scss */
+/* line 26, ../scss/_main.scss */
 header .links .link {
   text-decoration: none;
   padding-right: 5px;
@@ -99,7 +98,7 @@ header .links .link {
   float: left;
   color: black;
 }
-/* line 35, ../scss/_main.scss */
+/* line 34, ../scss/_main.scss */
 header .links .link .sr-only {
   position: absolute;
   width: 1px;

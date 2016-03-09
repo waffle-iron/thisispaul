@@ -4,5 +4,13 @@
   "version": "0.1.0",
   "devDependencies": {
     "compass": "^0.1.0"
+  },
+  "scripts": {
+    "compass": "compass compile",
+    "postcompass": "postcss --use autoprefixer --autoprefixer.browsers \"> 5%\" -d public/assets/css public/assets/css/*.css",
+    "prebuild": "npm run compass",
+    "build": "browserify -d src/main.js > public/assets/js/app.js",
+    "minify": "uglifyjs -c -m -- public/assets/js/app.js > public/assets/js/app.min.js",
+    "watch": "watchify -v -o public/assets/js/app.js src/main.js & compass watch"
   }
 }
