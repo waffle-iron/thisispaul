@@ -71,25 +71,22 @@ body {
 
 /* line 8, ../scss/_main.scss */
 header {
-  position: absolute;
-  top: 0;
-  left: 0;
   padding: 10px;
 }
-/* line 14, ../scss/_main.scss */
+/* line 11, ../scss/_main.scss */
 header h1 {
   font-size: 3em;
 }
-/* line 18, ../scss/_main.scss */
+/* line 15, ../scss/_main.scss */
 header p {
   margin-top: 10px;
   font-size: 1.2em;
 }
-/* line 23, ../scss/_main.scss */
+/* line 20, ../scss/_main.scss */
 header .links {
   margin-top: 10px;
 }
-/* line 26, ../scss/_main.scss */
+/* line 23, ../scss/_main.scss */
 header .links .link {
   text-decoration: none;
   padding-right: 5px;
@@ -98,7 +95,7 @@ header .links .link {
   float: left;
   color: black;
 }
-/* line 34, ../scss/_main.scss */
+/* line 31, ../scss/_main.scss */
 header .links .link .sr-only {
   position: absolute;
   width: 1px;
