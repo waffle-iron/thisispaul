@@ -4848,6 +4848,14 @@ module.exports = {
      */
     draw: function draw() {
         return this.svg;
+    },
+
+    /**
+     * Returns the width of this svg container
+     * @returns {number}
+     */
+    width: function width() {
+        return this.element.clientWidth;
     }
 
 };

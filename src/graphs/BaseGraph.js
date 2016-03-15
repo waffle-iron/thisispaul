@@ -39,6 +39,14 @@ module.exports = {
      */
     draw: function () {
         return this.svg;
+    },
+
+    /**
+     * Returns the width of this svg container
+     * @returns {number}
+     */
+    width: function () {
+        return this.element.clientWidth;
     }
 
 };
