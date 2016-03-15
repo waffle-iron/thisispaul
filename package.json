@@ -18,8 +18,10 @@
     "watch": "watchify -t [ babelify ] -v -o public/assets/js/app.js src/main.js & compass watch"
   },
   "dependencies": {
+    "animation-frame": "^0.2.5",
     "lodash": "^4.6.1",
     "object-assign": "^4.0.1",
+    "performance-now": "^0.2.0",
     "svg.js": "^1.1.1"
   }
 }

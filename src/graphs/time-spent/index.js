@@ -11,6 +11,10 @@ module.exports = objectAssign(new BaseGraph(), {
     // holds all the shapes for this graph
     shapes: {},
 
+    test() {
+        console.debug("look at me go 2");
+    },
+
     /**
      *
      */
@@ -19,14 +23,13 @@ module.exports = objectAssign(new BaseGraph(), {
             width = 0;
 
         self.shapes.time = self.draw().rect(width, 50).addClass('user-time');
-
-        setInterval(function () {
-            width++;
-            self.shapes.time.width(width);
-        }, 100);
     },
 
-    count() {
+    /**
+     * This is called every frame
+     * @param time
+     */
+    render(time) {
 
     }
 

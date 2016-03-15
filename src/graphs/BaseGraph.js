@@ -4,18 +4,26 @@ import SVG from 'svg.js';
 import _ from 'lodash';
 
 export var BaseGraph = function () {
+    this.constructor();
 };
 
 BaseGraph.prototype = {
+
+    /**
+     * Called when this is created
+     */
+    constructor() {
+        var self = this;
+
+        // attributes for this object
+        self._attributes = {};
+    },
 
     /**
      *
      */
     build() {
         var self = this;
-
-        // attributes for this object
-        self._attributes = {};
 
         // create an element for this graph
         self._element = document.createElement('div');
@@ -38,6 +46,14 @@ BaseGraph.prototype = {
      */
     start() {
         console.error('This function needs to be overwritten');
+    },
+
+    /**
+     * This is called every frame
+     * @param time
+     */
+    render(time) {
+        console.error('This function needs to be overwritten', time);
     },
 
     /**

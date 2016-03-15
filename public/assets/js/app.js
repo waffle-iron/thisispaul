@@ -1,5 +1,234 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 /**
+ * An even better animation frame.
+ *
+ * @copyright Oleg Slobodskoi 2015
+ * @website https://github.com/kof/animationFrame
+ * @license MIT
+ */
+
+module.exports = require('./lib/animation-frame')
+
+},{"./lib/animation-frame":2}],2:[function(require,module,exports){
+'use strict'
+
+var nativeImpl = require('./native')
+var now = require('./now')
+var performance = require('./performance')
+
+// Weird native implementation doesn't work if context is defined.
+var nativeRequest = nativeImpl.request
+var nativeCancel = nativeImpl.cancel
+
+/**
+ * Animation frame constructor.
+ *
+ * Options:
+ *   - `useNative` use the native animation frame if possible, defaults to true
+ *   - `frameRate` pass a custom frame rate
+ *
+ * @param {Object|Number} options
+ */
+function AnimationFrame(options) {
+    if (!(this instanceof AnimationFrame)) return new AnimationFrame(options)
+    options || (options = {})
+
+    // Its a frame rate.
+    if (typeof options == 'number') options = {frameRate: options}
+    options.useNative != null || (options.useNative = true)
+    this.options = options
+    this.frameRate = options.frameRate || AnimationFrame.FRAME_RATE
+    this._frameLength = 1000 / this.frameRate
+    this._isCustomFrameRate = this.frameRate !== AnimationFrame.FRAME_RATE
+    this._timeoutId = null
+    this._callbacks = {}
+    this._lastTickTime = 0
+    this._tickCounter = 0
+}
+
+module.exports = AnimationFrame
+
+/**
+ * Default frame rate used for shim implementation. Native implementation
+ * will use the screen frame rate, but js have no way to detect it.
+ *
+ * If you know your target device, define it manually.
+ *
+ * @type {Number}
+ * @api public
+ */
+AnimationFrame.FRAME_RATE = 60
+
+/**
+ * Replace the globally defined implementation or define it globally.
+ *
+ * @param {Object|Number} [options]
+ * @api public
+ */
+AnimationFrame.shim = function(options) {
+    var animationFrame = new AnimationFrame(options)
+
+    window.requestAnimationFrame = function(callback) {
+        return animationFrame.request(callback)
+    }
+    window.cancelAnimationFrame = function(id) {
+        return animationFrame.cancel(id)
+    }
+
+    return animationFrame
+}
+
+/**
+ * Request animation frame.
+ * We will use the native RAF as soon as we know it does works.
+ *
+ * @param {Function} callback
+ * @return {Number} timeout id or requested animation frame id
+ * @api public
+ */
+AnimationFrame.prototype.request = function(callback) {
+    var self = this
+
+    // Alawys inc counter to ensure it never has a conflict with the native counter.
+    // After the feature test phase we don't know exactly which implementation has been used.
+    // Therefore on #cancel we do it for both.
+    ++this._tickCounter
+
+    if (nativeImpl.supported && this.options.useNative && !this._isCustomFrameRate) {
+        return nativeRequest(callback)
+    }
+
+    if (!callback) throw new TypeError('Not enough arguments')
+
+    if (this._timeoutId == null) {
+        // Much faster than Math.max
+        // http://jsperf.com/math-max-vs-comparison/3
+        // http://jsperf.com/date-now-vs-date-gettime/11
+        var delay = this._frameLength + this._lastTickTime - now()
+        if (delay < 0) delay = 0
+
+        this._timeoutId = setTimeout(function() {
+            self._lastTickTime = now()
+            self._timeoutId = null
+            ++self._tickCounter
+            var callbacks = self._callbacks
+            self._callbacks = {}
+            for (var id in callbacks) {
+                if (callbacks[id]) {
+                    if (nativeImpl.supported && self.options.useNative) {
+                        nativeRequest(callbacks[id])
+                    } else {
+                        callbacks[id](performance.now())
+                    }
+                }
+            }
+        }, delay)
+    }
+
+    this._callbacks[this._tickCounter] = callback
+
+    return this._tickCounter
+}
+
+/**
+ * Cancel animation frame.
+ *
+ * @param {Number} timeout id or requested animation frame id
+ *
+ * @api public
+ */
+AnimationFrame.prototype.cancel = function(id) {
+    if (nativeImpl.supported && this.options.useNative) nativeCancel(id)
+    delete this._callbacks[id]
+}
+
+},{"./native":3,"./now":4,"./performance":6}],3:[function(require,module,exports){
+'use strict'
+
+var global = window
+
+// Test if we are within a foreign domain. Use raf from the top if possible.
+try {
+    // Accessing .name will throw SecurityError within a foreign domain.
+    global.top.name
+    global = global.top
+} catch(e) {}
+
+exports.request = global.requestAnimationFrame
+exports.cancel = global.cancelAnimationFrame || global.cancelRequestAnimationFrame
+exports.supported = false
+
+var vendors = ['Webkit', 'Moz', 'ms', 'O']
+
+// Grab the native implementation.
+for (var i = 0; i < vendors.length && !exports.request; i++) {
+    exports.request = global[vendors[i] + 'RequestAnimationFrame']
+    exports.cancel = global[vendors[i] + 'CancelAnimationFrame'] ||
+        global[vendors[i] + 'CancelRequestAnimationFrame']
+}
+
+// Test if native implementation works.
+// There are some issues on ios6
+// http://shitwebkitdoes.tumblr.com/post/47186945856/native-requestanimationframe-broken-on-ios-6
+// https://gist.github.com/KrofDrakula/5318048
+
+if (exports.request) {
+    exports.request.call(null, function() {
+        exports.supported = true
+    });
+}
+
+},{}],4:[function(require,module,exports){
+'use strict'
+
+/**
+ * Crossplatform Date.now()
+ *
+ * @return {Number} time in ms
+ * @api private
+ */
+module.exports = Date.now || function() {
+    return (new Date).getTime()
+}
+
+},{}],5:[function(require,module,exports){
+'use strict'
+
+var now = require('./now')
+
+/**
+ * Replacement for PerformanceTiming.navigationStart for the case when
+ * performance.now is not implemented.
+ *
+ * https://developer.mozilla.org/en-US/docs/Web/API/PerformanceTiming.navigationStart
+ *
+ * @type {Number}
+ * @api private
+ */
+exports.navigationStart = now()
+
+},{"./now":4}],6:[function(require,module,exports){
+'use strict'
+
+var now = require('./now')
+var PerformanceTiming = require('./performance-timing')
+
+/**
+ * Crossplatform performance.now()
+ *
+ * https://developer.mozilla.org/en-US/docs/Web/API/Performance.now()
+ *
+ * @return {Number} relative time in ms
+ * @api public
+ */
+exports.now = function () {
+    if (window.performance && window.performance.now) return window.performance.now()
+    return now() - PerformanceTiming.navigationStart
+}
+
+
+},{"./now":4,"./performance-timing":5}],7:[function(require,module,exports){
+/**
  * A specialized version of `_.forEach` for arrays without support for
  * iteratee shorthands.
  *
@@ -22,7 +251,7 @@ function arrayEach(array, iteratee) {
 
 module.exports = arrayEach;
 
-},{}],2:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 var identity = require('./identity');
 
 /**
@@ -38,7 +267,7 @@ function baseCastFunction(value) {
 
 module.exports = baseCastFunction;
 
-},{"./identity":17}],3:[function(require,module,exports){
+},{"./identity":23}],9:[function(require,module,exports){
 var baseForOwn = require('./_baseForOwn'),
     createBaseEach = require('./_createBaseEach');
 
@@ -54,7 +283,7 @@ var baseEach = createBaseEach(baseForOwn);
 
 module.exports = baseEach;
 
-},{"./_baseForOwn":5,"./_createBaseEach":10}],4:[function(require,module,exports){
+},{"./_baseForOwn":11,"./_createBaseEach":16}],10:[function(require,module,exports){
 var createBaseFor = require('./_createBaseFor');
 
 /**
@@ -73,7 +302,7 @@ var baseFor = createBaseFor();
 
 module.exports = baseFor;
 
-},{"./_createBaseFor":11}],5:[function(require,module,exports){
+},{"./_createBaseFor":17}],11:[function(require,module,exports){
 var baseFor = require('./_baseFor'),
     keys = require('./keys');
 
@@ -91,7 +320,7 @@ function baseForOwn(object, iteratee) {
 
 module.exports = baseForOwn;
 
-},{"./_baseFor":4,"./keys":28}],6:[function(require,module,exports){
+},{"./_baseFor":10,"./keys":34}],12:[function(require,module,exports){
 /** Used for built-in method references. */
 var objectProto = Object.prototype;
 
@@ -119,7 +348,7 @@ function baseHas(object, key) {
 
 module.exports = baseHas;
 
-},{}],7:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 /* Built-in method references for those with the same name as other `lodash` methods. */
 var nativeKeys = Object.keys;
 
@@ -137,7 +366,7 @@ function baseKeys(object) {
 
 module.exports = baseKeys;
 
-},{}],8:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 /**
  * The base implementation of `_.property` without support for deep paths.
  *
@@ -153,7 +382,7 @@ function baseProperty(key) {
 
 module.exports = baseProperty;
 
-},{}],9:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
 /**
  * The base implementation of `_.times` without support for iteratee shorthands
  * or max array length checks.
@@ -175,7 +404,7 @@ function baseTimes(n, iteratee) {
 
 module.exports = baseTimes;
 
-},{}],10:[function(require,module,exports){
+},{}],16:[function(require,module,exports){
 var isArrayLike = require('./isArrayLike');
 
 /**
@@ -209,7 +438,7 @@ function createBaseEach(eachFunc, fromRight) {
 
 module.exports = createBaseEach;
 
-},{"./isArrayLike":20}],11:[function(require,module,exports){
+},{"./isArrayLike":26}],17:[function(require,module,exports){
 /**
  * Creates a base function for methods like `_.forIn`.
  *
@@ -236,7 +465,7 @@ function createBaseFor(fromRight) {
 
 module.exports = createBaseFor;
 
-},{}],12:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
 var baseProperty = require('./_baseProperty');
 
 /**
@@ -253,7 +482,7 @@ var getLength = baseProperty('length');
 
 module.exports = getLength;
 
-},{"./_baseProperty":8}],13:[function(require,module,exports){
+},{"./_baseProperty":14}],19:[function(require,module,exports){
 var baseTimes = require('./_baseTimes'),
     isArguments = require('./isArguments'),
     isArray = require('./isArray'),
@@ -279,7 +508,7 @@ function indexKeys(object) {
 
 module.exports = indexKeys;
 
-},{"./_baseTimes":9,"./isArguments":18,"./isArray":19,"./isLength":23,"./isString":26}],14:[function(require,module,exports){
+},{"./_baseTimes":15,"./isArguments":24,"./isArray":25,"./isLength":29,"./isString":32}],20:[function(require,module,exports){
 /** Used as references for various `Number` constants. */
 var MAX_SAFE_INTEGER = 9007199254740991;
 
@@ -302,7 +531,7 @@ function isIndex(value, length) {
 
 module.exports = isIndex;
 
-},{}],15:[function(require,module,exports){
+},{}],21:[function(require,module,exports){
 /** Used for built-in method references. */
 var objectProto = Object.prototype;
 
@@ -322,7 +551,7 @@ function isPrototype(value) {
 
 module.exports = isPrototype;
 
-},{}],16:[function(require,module,exports){
+},{}],22:[function(require,module,exports){
 var arrayEach = require('./_arrayEach'),
     baseCastFunction = require('./_baseCastFunction'),
     baseEach = require('./_baseEach'),
@@ -364,7 +593,7 @@ function forEach(collection, iteratee) {
 
 module.exports = forEach;
 
-},{"./_arrayEach":1,"./_baseCastFunction":2,"./_baseEach":3,"./isArray":19}],17:[function(require,module,exports){
+},{"./_arrayEach":7,"./_baseCastFunction":8,"./_baseEach":9,"./isArray":25}],23:[function(require,module,exports){
 /**
  * This method returns the first argument given to it.
  *
@@ -386,7 +615,7 @@ function identity(value) {
 
 module.exports = identity;
 
-},{}],18:[function(require,module,exports){
+},{}],24:[function(require,module,exports){
 var isArrayLikeObject = require('./isArrayLikeObject');
 
 /** `Object#toString` result references. */
@@ -431,7 +660,7 @@ function isArguments(value) {
 
 module.exports = isArguments;
 
-},{"./isArrayLikeObject":21}],19:[function(require,module,exports){
+},{"./isArrayLikeObject":27}],25:[function(require,module,exports){
 /**
  * Checks if `value` is classified as an `Array` object.
  *
@@ -459,7 +688,7 @@ var isArray = Array.isArray;
 
 module.exports = isArray;
 
-},{}],20:[function(require,module,exports){
+},{}],26:[function(require,module,exports){
 var getLength = require('./_getLength'),
     isFunction = require('./isFunction'),
     isLength = require('./isLength');
@@ -494,7 +723,7 @@ function isArrayLike(value) {
 
 module.exports = isArrayLike;
 
-},{"./_getLength":12,"./isFunction":22,"./isLength":23}],21:[function(require,module,exports){
+},{"./_getLength":18,"./isFunction":28,"./isLength":29}],27:[function(require,module,exports){
 var isArrayLike = require('./isArrayLike'),
     isObjectLike = require('./isObjectLike');
 
@@ -527,7 +756,7 @@ function isArrayLikeObject(value) {
 
 module.exports = isArrayLikeObject;
 
-},{"./isArrayLike":20,"./isObjectLike":25}],22:[function(require,module,exports){
+},{"./isArrayLike":26,"./isObjectLike":31}],28:[function(require,module,exports){
 var isObject = require('./isObject');
 
 /** `Object#toString` result references. */
@@ -569,7 +798,7 @@ function isFunction(value) {
 
 module.exports = isFunction;
 
-},{"./isObject":24}],23:[function(require,module,exports){
+},{"./isObject":30}],29:[function(require,module,exports){
 /** Used as references for various `Number` constants. */
 var MAX_SAFE_INTEGER = 9007199254740991;
 
@@ -604,7 +833,7 @@ function isLength(value) {
 
 module.exports = isLength;
 
-},{}],24:[function(require,module,exports){
+},{}],30:[function(require,module,exports){
 /**
  * Checks if `value` is the [language type](https://es5.github.io/#x8) of `Object`.
  * (e.g. arrays, functions, objects, regexes, `new Number(0)`, and `new String('')`)
@@ -635,7 +864,7 @@ function isObject(value) {
 
 module.exports = isObject;
 
-},{}],25:[function(require,module,exports){
+},{}],31:[function(require,module,exports){
 /**
  * Checks if `value` is object-like. A value is object-like if it's not `null`
  * and has a `typeof` result of "object".
@@ -665,7 +894,7 @@ function isObjectLike(value) {
 
 module.exports = isObjectLike;
 
-},{}],26:[function(require,module,exports){
+},{}],32:[function(require,module,exports){
 var isArray = require('./isArray'),
     isObjectLike = require('./isObjectLike');
 
@@ -704,7 +933,7 @@ function isString(value) {
 
 module.exports = isString;
 
-},{"./isArray":19,"./isObjectLike":25}],27:[function(require,module,exports){
+},{"./isArray":25,"./isObjectLike":31}],33:[function(require,module,exports){
 /**
  * Checks if `value` is `undefined`.
  *
@@ -727,7 +956,7 @@ function isUndefined(value) {
 
 module.exports = isUndefined;
 
-},{}],28:[function(require,module,exports){
+},{}],34:[function(require,module,exports){
 var baseHas = require('./_baseHas'),
     baseKeys = require('./_baseKeys'),
     indexKeys = require('./_indexKeys'),
@@ -784,7 +1013,7 @@ function keys(object) {
 
 module.exports = keys;
 
-},{"./_baseHas":6,"./_baseKeys":7,"./_indexKeys":13,"./_isIndex":14,"./_isPrototype":15,"./isArrayLike":20}],29:[function(require,module,exports){
+},{"./_baseHas":12,"./_baseKeys":13,"./_indexKeys":19,"./_isIndex":20,"./_isPrototype":21,"./isArrayLike":26}],35:[function(require,module,exports){
 /* eslint-disable no-unused-vars */
 'use strict';
 var hasOwnProperty = Object.prototype.hasOwnProperty;
@@ -825,7 +1054,7 @@ module.exports = Object.assign || function (target, source) {
 	return to;
 };
 
-},{}],30:[function(require,module,exports){
+},{}],36:[function(require,module,exports){
 /* svg.js 1.1.0-5-gc66d24a - svg selector inventor polyfill regex default color array pointarray patharray number viewbox bbox rbox element parent container fx relative event defs group arrange mask clip gradient pattern doc shape symbol use rect ellipse line poly path image text textpath nested hyperlink marker sugar set data memory helpers - svgjs.com/license */
 ;(function(root, factory) {
   if (typeof define === 'function' && define.amd) {
@@ -4825,7 +5054,7 @@ module.exports = Object.assign || function (target, source) {
   return SVG
 }));
 
-},{}],31:[function(require,module,exports){
+},{}],37:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -4843,19 +5072,29 @@ var _svg2 = _interopRequireDefault(_svg);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var BaseGraph = exports.BaseGraph = function BaseGraph() {};
+var BaseGraph = exports.BaseGraph = function BaseGraph() {
+    this.constructor();
+};
 
 BaseGraph.prototype = {
 
     /**
-     *
+     * Called when this is created
      */
 
-    build: function build() {
+    constructor: function constructor() {
         var self = this;
 
         // attributes for this object
         self._attributes = {};
+    },
+
+
+    /**
+     *
+     */
+    build: function build() {
+        var self = this;
 
         // create an element for this graph
         self._element = document.createElement('div');
@@ -4879,6 +5118,15 @@ BaseGraph.prototype = {
      */
     start: function start() {
         console.error('This function needs to be overwritten');
+    },
+
+
+    /**
+     * This is called every frame
+     * @param time
+     */
+    render: function render(time) {
+        console.error('This function needs to be overwritten', time);
     },
 
 
@@ -4908,7 +5156,7 @@ BaseGraph.prototype = {
     }
 };
 
-},{"lodash/isUndefined":27,"svg.js":30}],32:[function(require,module,exports){
+},{"lodash/isUndefined":33,"svg.js":36}],38:[function(require,module,exports){
 'use strict';
 
 var _objectAssign = require('object-assign');
@@ -4927,6 +5175,11 @@ module.exports = (0, _objectAssign2.default)(new _BaseGraph.BaseGraph(), {
     // holds all the shapes for this graph
     shapes: {},
 
+    test: function test() {
+        console.debug("look at me go 2");
+    },
+
+
     /**
      *
      */
@@ -4936,33 +5189,64 @@ module.exports = (0, _objectAssign2.default)(new _BaseGraph.BaseGraph(), {
 
         self.shapes.time = self.draw().rect(width, 50).addClass('user-time');
 
-        setInterval(function () {
-            width++;
-            self.shapes.time.width(width);
-        }, 100);
+        //setInterval(function () {
+        //    width++;
+        //    self.shapes.time.width(width);
+        //}, 100);
     },
-    count: function count() {}
+
+
+    /**
+     * This is called every frame
+     * @param time
+     */
+    render: function render(time) {}
 });
 
-},{"../BaseGraph":31,"object-assign":29}],33:[function(require,module,exports){
+},{"../BaseGraph":37,"object-assign":35}],39:[function(require,module,exports){
 'use strict';
+
+// import lodash
 
 var _forEach2 = require('lodash/forEach');
 
 var _forEach3 = _interopRequireDefault(_forEach2);
 
+var _animationFrame = require('animation-frame');
+
+var _animationFrame2 = _interopRequireDefault(_animationFrame);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+// this is an array of graphs
 var graphs = [];
 
-// this just bootstraps all the different graphs
-graphs.push(require('./graphs/time-spent'));
+// create a new frame
+var animationFrame = new _animationFrame2.default();
 
-// loop through each graph and build them
-(0, _forEach3.default)(graphs, function (graph) {
-    setTimeout(function () {
+// just doing this so it doesnt stop the page loading
+setTimeout(function () {
+
+    // this just bootstraps all the different graphs
+    graphs.push(require('./graphs/time-spent'));
+
+    // loop through each graph and build them
+    (0, _forEach3.default)(graphs, function (graph) {
         graph.build();
-    }, 0);
-});
+    });
 
-},{"./graphs/time-spent":32,"lodash/forEach":16}]},{},[33]);
+    var render = function render(time) {
+        // loop through each graph and build them
+        (0, _forEach3.default)(graphs, function (graph) {
+            graph.render(time);
+        });
+
+        // request the frame again
+        animationFrame.request(render);
+    };
+
+    // start the animation
+    animationFrame.request(render);
+}, 0);
+
+},{"./graphs/time-spent":38,"animation-frame":1,"lodash/forEach":22}]},{},[39]);
