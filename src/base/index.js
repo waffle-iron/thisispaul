@@ -1,5 +1,7 @@
 'use strict';
 
+import SVG from 'svg.js';
+
 module.exports = {
 
     /**
@@ -9,7 +11,7 @@ module.exports = {
         var self = this;
 
         // set the element
-        self.element = document.getElementById(self.id);
+        self.draw = SVG(self.id);
 
         // start the
         self.start();
@@ -24,10 +26,10 @@ module.exports = {
 
     /**
      *
-     * @returns {Element|*}
+     * @returns {SVG}
      */
-    getElement: function () {
-        return this.element;
+    draw: function () {
+        return this.draw;
     }
 
 };

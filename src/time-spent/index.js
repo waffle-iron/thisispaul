@@ -6,12 +6,12 @@ var objectAssign = require('object-assign'),
 module.exports = objectAssign(Base, {
 
     // this is the id
-    id: 'time-graph',
+    id: 'time-spent',
 
     start: function () {
         var self = this;
 
-        console.debug("starting");
+
     }
 
 });
