@@ -5219,12 +5219,25 @@ module.exports = (0, _objectAssign2.default)(new _BaseGraph.BaseGraph(), {
 
         // create the shape for the users current time
         self.shapes.currentTime = self.draw().rect(0, self.height()).addClass('user-time');
+
+        // create text for the current time
+        self.shapes.currentTimeText = self.draw().text(self.getTimeText(0)).move(10, 10);
+    },
+
+
+    /**
+     *
+     * @param {number} time time in milliseconds
+     * @returns {string}
+     */
+    getTimeText: function getTimeText(time) {
+        return "Time on site: " + Math.floor(time / 1000) + " seconds";
     },
 
 
     /**
      * This is called every frame
-     * @param {float} time number of milliseconds since the start
+     * @param {number} time number of milliseconds since the start
      */
     render: function render(time) {
         var self = this,
@@ -5234,6 +5247,8 @@ module.exports = (0, _objectAssign2.default)(new _BaseGraph.BaseGraph(), {
 
         // set the width
         self.shapes.currentTime.width(width);
+
+        self.shapes.currentTimeText.text(self.getTimeText(time));
     }
 });
 
