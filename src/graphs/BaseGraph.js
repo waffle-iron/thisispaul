@@ -37,14 +37,14 @@ BaseGraph.prototype = {
         // set the element
         self._svg = SVG(self.id);
 
-        // start the
-        self.start();
+        // initialise the graph
+        self.init();
     },
 
     /**
      *
      */
-    start() {
+    init() {
         console.error('This function needs to be overwritten');
     },
 

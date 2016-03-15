@@ -11,14 +11,10 @@ module.exports = objectAssign(new BaseGraph(), {
     // holds all the shapes for this graph
     shapes: {},
 
-    test() {
-        console.debug("look at me go 2");
-    },
-
     /**
      *
      */
-    start() {
+    init() {
         var self = this,
             width = 0;
 

@@ -5108,15 +5108,15 @@ BaseGraph.prototype = {
         // set the element
         self._svg = (0, _svg2.default)(self.id);
 
-        // start the
-        self.start();
+        // initialise the graph
+        self.init();
     },
 
 
     /**
      *
      */
-    start: function start() {
+    init: function init() {
         console.error('This function needs to be overwritten');
     },
 
