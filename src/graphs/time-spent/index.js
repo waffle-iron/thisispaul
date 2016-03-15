@@ -2,6 +2,7 @@
 
 import objectAssign from 'object-assign';
 import {BaseGraph} from '../BaseGraph';
+import prettySeconds from 'pretty-seconds';
 
 module.exports = objectAssign(new BaseGraph(), {
 
@@ -33,7 +34,7 @@ module.exports = objectAssign(new BaseGraph(), {
      * @returns {string}
      */
     getTimeText(time) {
-        return "Time on site: " + Math.floor(time / 1000) + " seconds";
+        return "Time on site: " + prettySeconds(Math.floor(time / 1000));
     },
 
     /**
@@ -49,7 +50,11 @@ module.exports = objectAssign(new BaseGraph(), {
         // set the width
         self.shapes.currentTime.width(width);
 
-        self.shapes.currentTimeText.text(self.getTimeText(time));
+        // update the text
+        let text = self.getTimeText(time);
+        if(text !== self.shapes.currentTimeText.text()) {
+            self.shapes.currentTimeText.text(text);
+        }
     }
 
 });

@@ -1055,6 +1055,50 @@ module.exports = Object.assign || function (target, source) {
 };
 
 },{}],36:[function(require,module,exports){
+"use strict";
+
+function quantify(data, unit, value) {
+    if (value) {
+        if (value > 1 || value < -1)
+            unit += 's';
+
+        data.push(value + ' ' + unit);
+    }
+
+    return data;
+}
+
+module.exports = function prettySeconds(seconds) {
+
+    var prettyString = '',
+        data = [];
+
+    if (typeof seconds === 'number') {
+
+        data = quantify(data, 'day',    parseInt(seconds / 86400));
+        data = quantify(data, 'hour',   parseInt((seconds % 86400) / 3600));
+        data = quantify(data, 'minute', parseInt((seconds % 3600) / 60));
+        data = quantify(data, 'second', seconds % 60);
+
+        var length = data.length,
+            i;
+
+        for (i = 0; i < length; i++) {
+
+            if (prettyString.length > 0)
+                if (i == length - 1)
+                    prettyString += ' and ';
+                else
+                    prettyString += ', ';
+
+            prettyString += data[i];
+        }
+    }
+
+    return prettyString;
+};
+
+},{}],37:[function(require,module,exports){
 /* svg.js 1.1.0-5-gc66d24a - svg selector inventor polyfill regex default color array pointarray patharray number viewbox bbox rbox element parent container fx relative event defs group arrange mask clip gradient pattern doc shape symbol use rect ellipse line poly path image text textpath nested hyperlink marker sugar set data memory helpers - svgjs.com/license */
 ;(function(root, factory) {
   if (typeof define === 'function' && define.amd) {
@@ -5054,7 +5098,7 @@ module.exports = Object.assign || function (target, source) {
   return SVG
 }));
 
-},{}],37:[function(require,module,exports){
+},{}],38:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -5189,7 +5233,7 @@ BaseGraph.prototype = {
     }
 };
 
-},{"lodash/isUndefined":33,"svg.js":36}],38:[function(require,module,exports){
+},{"lodash/isUndefined":33,"svg.js":37}],39:[function(require,module,exports){
 'use strict';
 
 var _objectAssign = require('object-assign');
@@ -5197,6 +5241,10 @@ var _objectAssign = require('object-assign');
 var _objectAssign2 = _interopRequireDefault(_objectAssign);
 
 var _BaseGraph = require('../BaseGraph');
+
+var _prettySeconds = require('pretty-seconds');
+
+var _prettySeconds2 = _interopRequireDefault(_prettySeconds);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -5231,7 +5279,7 @@ module.exports = (0, _objectAssign2.default)(new _BaseGraph.BaseGraph(), {
      * @returns {string}
      */
     getTimeText: function getTimeText(time) {
-        return "Time on site: " + Math.floor(time / 1000) + " seconds";
+        return "Time on site: " + (0, _prettySeconds2.default)(Math.floor(time / 1000));
     },
 
 
@@ -5248,11 +5296,15 @@ module.exports = (0, _objectAssign2.default)(new _BaseGraph.BaseGraph(), {
         // set the width
         self.shapes.currentTime.width(width);
 
-        self.shapes.currentTimeText.text(self.getTimeText(time));
+        // update the text
+        var text = self.getTimeText(time);
+        if (text !== self.shapes.currentTimeText.text()) {
+            self.shapes.currentTimeText.text(text);
+        }
     }
 });
 
-},{"../BaseGraph":37,"object-assign":35}],39:[function(require,module,exports){
+},{"../BaseGraph":38,"object-assign":35,"pretty-seconds":36}],40:[function(require,module,exports){
 'use strict';
 
 // import lodash
@@ -5298,4 +5350,4 @@ setTimeout(function () {
     animationFrame.request(render);
 }, 0);
 
-},{"./graphs/time-spent":38,"animation-frame":1,"lodash/forEach":22}]},{},[39]);
+},{"./graphs/time-spent":39,"animation-frame":1,"lodash/forEach":22}]},{},[40]);
