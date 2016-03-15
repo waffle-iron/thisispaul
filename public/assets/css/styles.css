@@ -71,31 +71,35 @@ body {
 
 /* line 8, ../scss/_main.scss */
 header {
-  padding: 10px;
+  padding: 20px;
+  text-align: center;
+  background: url('../img/background.png?1351255830') repeat repeat;
+  color: #fff;
 }
-/* line 11, ../scss/_main.scss */
+/* line 14, ../scss/_main.scss */
 header h1 {
-  font-size: 3em;
+  font-size: 4em;
+  text-transform: uppercase;
 }
-/* line 15, ../scss/_main.scss */
+/* line 19, ../scss/_main.scss */
 header p {
   margin-top: 10px;
   font-size: 1.2em;
 }
-/* line 20, ../scss/_main.scss */
+/* line 24, ../scss/_main.scss */
 header .links {
-  margin-top: 10px;
+  display: block;
+  margin: 10px auto 0;
 }
-/* line 23, ../scss/_main.scss */
+/* line 28, ../scss/_main.scss */
 header .links .link {
+  display: inline-block;
   text-decoration: none;
   padding-right: 5px;
   line-height: 32px;
   height: 32px;
-  float: left;
-  color: black;
 }
-/* line 31, ../scss/_main.scss */
+/* line 35, ../scss/_main.scss */
 header .links .link .sr-only {
   position: absolute;
   width: 1px;
