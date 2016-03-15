@@ -91,7 +91,7 @@ function baseForOwn(object, iteratee) {
 
 module.exports = baseForOwn;
 
-},{"./_baseFor":4,"./keys":27}],6:[function(require,module,exports){
+},{"./_baseFor":4,"./keys":28}],6:[function(require,module,exports){
 /** Used for built-in method references. */
 var objectProto = Object.prototype;
 
@@ -705,6 +705,29 @@ function isString(value) {
 module.exports = isString;
 
 },{"./isArray":19,"./isObjectLike":25}],27:[function(require,module,exports){
+/**
+ * Checks if `value` is `undefined`.
+ *
+ * @static
+ * @memberOf _
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is `undefined`, else `false`.
+ * @example
+ *
+ * _.isUndefined(void 0);
+ * // => true
+ *
+ * _.isUndefined(null);
+ * // => false
+ */
+function isUndefined(value) {
+  return value === undefined;
+}
+
+module.exports = isUndefined;
+
+},{}],28:[function(require,module,exports){
 var baseHas = require('./_baseHas'),
     baseKeys = require('./_baseKeys'),
     indexKeys = require('./_indexKeys'),
@@ -761,7 +784,7 @@ function keys(object) {
 
 module.exports = keys;
 
-},{"./_baseHas":6,"./_baseKeys":7,"./_indexKeys":13,"./_isIndex":14,"./_isPrototype":15,"./isArrayLike":20}],28:[function(require,module,exports){
+},{"./_baseHas":6,"./_baseKeys":7,"./_indexKeys":13,"./_isIndex":14,"./_isPrototype":15,"./isArrayLike":20}],29:[function(require,module,exports){
 /* eslint-disable no-unused-vars */
 'use strict';
 var hasOwnProperty = Object.prototype.hasOwnProperty;
@@ -802,7 +825,7 @@ module.exports = Object.assign || function (target, source) {
 	return to;
 };
 
-},{}],29:[function(require,module,exports){
+},{}],30:[function(require,module,exports){
 /* svg.js 1.1.0-5-gc66d24a - svg selector inventor polyfill regex default color array pointarray patharray number viewbox bbox rbox element parent container fx relative event defs group arrange mask clip gradient pattern doc shape symbol use rect ellipse line poly path image text textpath nested hyperlink marker sugar set data memory helpers - svgjs.com/license */
 ;(function(root, factory) {
   if (typeof define === 'function' && define.amd) {
@@ -4802,8 +4825,17 @@ module.exports = Object.assign || function (target, source) {
   return SVG
 }));
 
-},{}],30:[function(require,module,exports){
+},{}],31:[function(require,module,exports){
 'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.BaseGraph = undefined;
+
+var _isUndefined2 = require('lodash/isUndefined');
+
+var _isUndefined3 = _interopRequireDefault(_isUndefined2);
 
 var _svg = require('svg.js');
 
@@ -4811,29 +4843,36 @@ var _svg2 = _interopRequireDefault(_svg);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-module.exports = {
+var BaseGraph = exports.BaseGraph = function BaseGraph() {};
+
+BaseGraph.prototype = {
 
     /**
      *
      */
+
     build: function build() {
         var self = this;
 
+        // attributes for this object
+        self._attributes = {};
+
         // create an element for this graph
-        self.element = document.createElement('div');
+        self._element = document.createElement('div');
 
         // set the elements id
-        self.element.id = self.id;
+        self._element.id = self.id;
 
         // add the div to the page
-        document.body.appendChild(self.element);
+        document.body.appendChild(self._element);
 
         // set the element
-        self.svg = (0, _svg2.default)(self.id);
+        self._svg = (0, _svg2.default)(self.id);
 
         // start the
         self.start();
     },
+
 
     /**
      *
@@ -4842,25 +4881,34 @@ module.exports = {
         console.error('This function needs to be overwritten');
     },
 
+
     /**
      *
      * @returns {SVG}
      */
     draw: function draw() {
-        return this.svg;
+        return this._svg;
     },
+
 
     /**
      * Returns the width of this svg container
      * @returns {number}
      */
     width: function width() {
-        return this.element.clientWidth;
-    }
+        var self = this;
 
+        // if the width is undefined then we need to get it
+        if ((0, _isUndefined3.default)(self._attributes.width)) {
+            self._attributes.width = self._element.clientWidth;
+        }
+
+        // return the width
+        return self._attributes.width;
+    }
 };
 
-},{"svg.js":29}],31:[function(require,module,exports){
+},{"lodash/isUndefined":27,"svg.js":30}],32:[function(require,module,exports){
 'use strict';
 
 var _objectAssign = require('object-assign');
@@ -4869,11 +4917,9 @@ var _objectAssign2 = _interopRequireDefault(_objectAssign);
 
 var _BaseGraph = require('../BaseGraph');
 
-var _BaseGraph2 = _interopRequireDefault(_BaseGraph);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-module.exports = (0, _objectAssign2.default)(_BaseGraph2.default, {
+module.exports = (0, _objectAssign2.default)(new _BaseGraph.BaseGraph(), {
 
     // this is the id
     id: 'time-spent',
@@ -4894,11 +4940,11 @@ module.exports = (0, _objectAssign2.default)(_BaseGraph2.default, {
             width++;
             self.shapes.time.width(width);
         }, 100);
-    }
-
+    },
+    count: function count() {}
 });
 
-},{"../BaseGraph":30,"object-assign":28}],32:[function(require,module,exports){
+},{"../BaseGraph":31,"object-assign":29}],33:[function(require,module,exports){
 'use strict';
 
 var _forEach2 = require('lodash/forEach');
@@ -4919,4 +4965,4 @@ graphs.push(require('./graphs/time-spent'));
     }, 0);
 });
 
-},{"./graphs/time-spent":31,"lodash/forEach":16}]},{},[32]);
+},{"./graphs/time-spent":32,"lodash/forEach":16}]},{},[33]);

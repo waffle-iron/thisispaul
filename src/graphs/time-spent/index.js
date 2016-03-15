@@ -1,9 +1,9 @@
 'use strict';
 
 import objectAssign from 'object-assign';
-import BaseGraph from '../BaseGraph';
+import {BaseGraph} from '../BaseGraph';
 
-module.exports = objectAssign(BaseGraph, {
+module.exports = objectAssign(new BaseGraph(), {
 
     // this is the id
     id: 'time-spent',
@@ -14,7 +14,7 @@ module.exports = objectAssign(BaseGraph, {
     /**
      *
      */
-    start: function () {
+    start() {
         var self = this,
             width = 0;
 
@@ -24,6 +24,10 @@ module.exports = objectAssign(BaseGraph, {
             width++;
             self.shapes.time.width(width);
         }, 100);
+    },
+
+    count() {
+
     }
 
 });
