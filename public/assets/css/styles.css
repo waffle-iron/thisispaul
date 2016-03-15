@@ -63,7 +63,6 @@ table {
 /***************
 COMMON VARIABLES
 ***************/
-/*PRIMARY COLOURS*/
 /* line 4, ../scss/_main.scss */
 body {
   font-family: "Roboto Slab", serif;
@@ -73,7 +72,7 @@ body {
 header {
   padding: 20px;
   text-align: center;
-  background: url('../img/background.png?1351255830') repeat repeat;
+  background: url('../img/background.png?1339701544') repeat repeat;
   color: #fff;
 }
 /* line 14, ../scss/_main.scss */
