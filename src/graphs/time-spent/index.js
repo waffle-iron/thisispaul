@@ -13,7 +13,7 @@ module.exports = objectAssign(BaseGraph, {
      */
     start: function () {
         var self = this;
-
+        
 
     }
 

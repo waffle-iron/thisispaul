@@ -10,8 +10,17 @@ module.exports = {
     build: function () {
         var self = this;
 
+        // create an element for this graph
+        self.element = document.createElement('div');
+
+        // set the elements id
+        self.element.id = self.id;
+
+        // add the div to the page
+        document.body.appendChild(self.element);
+
         // set the element
-        self.draw = SVG(self.id);
+        self.svg = SVG(self.id);
 
         // start the
         self.start();
@@ -29,7 +38,7 @@ module.exports = {
      * @returns {SVG}
      */
     draw: function () {
-        return this.draw;
+        return this.svg;
     }
 
 };
