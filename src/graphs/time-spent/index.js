@@ -23,7 +23,7 @@ module.exports = objectAssign(BaseGraph, {
         setInterval(function () {
             width++;
             self.shapes.time.width(width);
-        }, 1000);
+        }, 100);
     }
 
 });

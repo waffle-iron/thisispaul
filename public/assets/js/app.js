@@ -4885,7 +4885,7 @@ module.exports = (0, _objectAssign2.default)(_BaseGraph2.default, {
         setInterval(function () {
             width++;
             self.shapes.time.width(width);
-        }, 1000);
+        }, 100);
     }
 
 });
