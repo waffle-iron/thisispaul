@@ -109,3 +109,12 @@ header .links .link .sr-only {
   clip: rect(0, 0, 0, 0);
   border: 0;
 }
+
+/* line 1, ../scss/graphs/_time-spent.scss */
+#time-spent {
+  height: 50px;
+}
+/* line 4, ../scss/graphs/_time-spent.scss */
+#time-spent .user-time {
+  fill: #aaa;
+}

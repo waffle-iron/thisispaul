@@ -4878,9 +4878,9 @@ module.exports = (0, _objectAssign2.default)(_BaseGraph2.default, {
      */
     start: function start() {
         var self = this,
-            width = 100;
+            width = 0;
 
-        self.shapes.time = self.draw().rect(width, 100);
+        self.shapes.time = self.draw().rect(width, 50).addClass('user-time');
 
         setInterval(function () {
             width++;
