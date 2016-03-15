@@ -5110,6 +5110,11 @@ BaseGraph.prototype = {
 
         // initialise the graph
         self.init();
+
+        // add a listener for the window resizing
+        window.addEventListener("resize", function () {
+            self.resize();
+        });
     },
 
 
@@ -5140,6 +5145,17 @@ BaseGraph.prototype = {
 
 
     /**
+     * Called when the window is resized
+     */
+    resize: function resize() {
+        var self = this;
+
+        // reset the attributes
+        self._attributes = {};
+    },
+
+
+    /**
      * Returns the width of this svg container
      * @returns {number}
      */
@@ -5153,6 +5169,23 @@ BaseGraph.prototype = {
 
         // return the width
         return self._attributes.width;
+    },
+
+
+    /**
+     * Returns the height of this svg container
+     * @returns {number}
+     */
+    height: function height() {
+        var self = this;
+
+        // if the height is undefined then we need to get it
+        if ((0, _isUndefined3.default)(self._attributes.height)) {
+            self._attributes.height = self._element.clientHeight;
+        }
+
+        // return the height
+        return self._attributes.height;
     }
 };
 
@@ -5172,35 +5205,36 @@ module.exports = (0, _objectAssign2.default)(new _BaseGraph.BaseGraph(), {
     // this is the id
     id: 'time-spent',
 
-    // holds all the shapes for this graph
+    // this is 5 minutes in seconds
+    max: 300,
+
+    // holds references to the shapes
     shapes: {},
-
-    test: function test() {
-        console.debug("look at me go 2");
-    },
-
 
     /**
      *
      */
-    start: function start() {
-        var self = this,
-            width = 0;
+    init: function init() {
+        var self = this;
 
-        self.shapes.time = self.draw().rect(width, 50).addClass('user-time');
-
-        //setInterval(function () {
-        //    width++;
-        //    self.shapes.time.width(width);
-        //}, 100);
+        // create the shape for the users current time
+        self.shapes.currentTime = self.draw().rect(0, self.height()).addClass('user-time');
     },
 
 
     /**
      * This is called every frame
-     * @param time
+     * @param {float} time number of milliseconds since the start
      */
-    render: function render(time) {}
+    render: function render(time) {
+        var self = this,
+            max = self.max * 1000,
+            ratio = time / max,
+            width = self.width() * ratio;
+
+        // set the width
+        self.shapes.currentTime.width(width);
+    }
 });
 
 },{"../BaseGraph":37,"object-assign":35}],39:[function(require,module,exports){

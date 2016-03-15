@@ -39,6 +39,11 @@ BaseGraph.prototype = {
 
         // initialise the graph
         self.init();
+
+        // add a listener for the window resizing
+        window.addEventListener("resize", () => {
+            self.resize()
+        });
     },
 
     /**
@@ -65,6 +70,16 @@ BaseGraph.prototype = {
     },
 
     /**
+     * Called when the window is resized
+     */
+    resize() {
+        var self = this;
+
+        // reset the attributes
+        self._attributes = {};
+    },
+
+    /**
      * Returns the width of this svg container
      * @returns {number}
      */
@@ -78,6 +93,22 @@ BaseGraph.prototype = {
 
         // return the width
         return self._attributes.width;
+    },
+
+    /**
+     * Returns the height of this svg container
+     * @returns {number}
+     */
+    height() {
+        var self = this;
+
+        // if the height is undefined then we need to get it
+        if (_.isUndefined(self._attributes.height)) {
+            self._attributes.height = self._element.clientHeight;
+        }
+
+        // return the height
+        return self._attributes.height;
     }
 
 };
